@@ -10,7 +10,7 @@ use App\Models\User;
 
 class Controller extends BaseController
 {
-    public function index()
+    public function k()
     {
         $users = User::withCount('articles')->paginate(5);
         return view('welcome',compact('users'));

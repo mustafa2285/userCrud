@@ -19,7 +19,7 @@ use App\Models\User;
 |
 */
 
-Route::get('/', [Controller::class, 'index']);
+Route::get('/', [Controller::class, 'k']);
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     $users = User::withCount('articles')->paginate(5);
