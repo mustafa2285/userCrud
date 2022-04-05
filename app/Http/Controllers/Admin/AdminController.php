@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -27,7 +29,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return "create fonksiyonu";
+        return view('admin.create');
     }
 
     /**
@@ -36,9 +38,13 @@ class AdminController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserCreateRequest $request)
     {
-        //
+        // User::where('password',md5($request->password));
+        User::create(['name' => $request->name,
+                      'email' => $request->email,
+                      'password' => md5($request->password)]);
+        return redirect()->route('users.index')->withSuccess('Kullanıcı Başarıyla Oluşturuldu');
     }
 
     /**
@@ -60,7 +66,8 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id) ?? abort(404,"Kulanıcı Bulunamadı");
+        return view('admin.edit', compact('user'));
     }
 
     /**
@@ -72,7 +79,11 @@ class AdminController extends Controller
      */
     public function update(UserUpdateRequest $request, $id)
     {
-        //
+        $user = User::find($id) ?? abort(404,"Kulanıcı Bulunamadı");
+        User::where('id',$id)->update(['name' => $request->name,
+                      'email' => $request->email,
+                      'password' => md5($request->password)]);
+        return redirect()->route('users.index')->withSuccess('Kulanıcı Güncelleme işlemi başarıyla gerçekleşti');
     }
 
     /**

@@ -2,6 +2,9 @@
     <x-slot name="header">KULANICILAR</x-slot>
     <div class="card" x-data="{ open: false }" >
         <div class="card-body">
+            <h5 class="card-title">
+                <a href="{{route('users.create')}}" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Kulanıcı ekle</a> 
+            </h5>
             <table class="table table-bordered table-striped" >
                 <thead>
                     <tr>
@@ -22,7 +25,7 @@
                 @foreach($users as $user)
                     <tr >
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $user->name }}</td>
+                        <td > <img src="{{ $user-> profile_photo_url }}" class="w-12 rounded-pill float-right"><strong>{{ $user->name }}</strong></td>
                         <td>{{ $user->email  }}</td>
                         <td>{{ $user->articles_count  }}</td>
                         <td >Kullanıcı Makalelerini gör --
@@ -30,6 +33,7 @@
                                 <i class="fa fa-question"></i>
                         </td>
                         <td> 
+                            <a href="{{route('users.edit',$user->id)}}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
                             <a href="{{route('users.destroy',$user->id)}}" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i></a>
                         </td>
                     </tr>

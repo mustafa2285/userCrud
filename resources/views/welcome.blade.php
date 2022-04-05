@@ -1,6 +1,25 @@
 <x-guest-layout>
     <div class="container">
+        @if (Route::has('login'))
+            <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+                @auth
+                    <a href="{{ route('dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Anasayfa</a>
+                    
+                @else
+                    <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Giriş</a>
+
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Kayıt ol</a>
+                    @endif
+                @endauth
+            </div>
+        @endif
+        @auth
         <a type="submit"class="my-4 btn btn-light btn-sm w-100" href="{{route('dashboard')}}"><h5>Anasayfa</h5></a>
+        @else
+        <a type="submit"class="mt-4 btn btn-light btn-sm w-100" href="{{route('login')}}"><h5>Giriş yap</h5></a>
+        <a type="submit"class="my-4 btn btn-light btn-sm w-100" href="{{ route('register') }}"><h5>Kayıt ol</h5></a>
+        @endauth
          @foreach($users as $user)
             <div class="row py-3 mb-4 bg-secondary text-white rounded"  x-data="{ open{{ $loop->iteration }}: false }">
                 <div class="col-11 ps-4 "><h4>{{ $user->name }} Kulanıcısına Ait Makaleler</h4> </div>
