@@ -9,7 +9,7 @@ use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use Illuminate\Support\Str;
 
-class AdminController extends Controller
+class AdminController extends Controller 
 {
     /**
      * Display a listing of the resource.
@@ -40,13 +40,28 @@ class AdminController extends Controller
      */
     public function store(UserCreateRequest $request)
     {
-        // User::where('password',md5($request->password));
-        User::create(['name' => $request->name,
-                      'email' => $request->email,
-                      'password' => md5($request->password)]);
-        return redirect()->route('users.index')->withSuccess('Kullanıcı Başarıyla Oluşturuldu');
+        if($request->hasFile('profile_photo_path')){
+                        $fileName = Str::slug($request->name).'.'.$request->profile_photo_path->extension();
+                        $fileNameWithUload = "storage/profile-photos/".$fileName;
+                        $request->profile_photo_path->move(public_path('storage/profile-photos'),$fileName);
+                        $request->merge([
+                            User::create( [
+                                'profile_photo_path'=>$fileNameWithUload,
+                                'name' => $request->name,
+                                'email' => $request->email,
+                                'password' => bcrypt($request->password),
+                            ] )
+                        ]);
+                        
+                      }
+                    else {
+                    User::create(['name' => $request->name,
+                                'email' => $request->email,
+                                'password' => bcrypt($request->password)]);
+                }
+            return redirect()->route('users.index')->withSuccess('Kullanıcı Başarıyla Oluşturuldu');      
     }
-
+    
     /**
      * Display the specified resource.
      *
@@ -80,9 +95,22 @@ class AdminController extends Controller
     public function update(UserUpdateRequest $request, $id)
     {
         $user = User::find($id) ?? abort(404,"Kulanıcı Bulunamadı");
-        User::where('id',$id)->update(['name' => $request->name,
-                      'email' => $request->email,
-                      'password' => md5($request->password)]);
+        if($request->hasFile('profile_photo_path')){
+                        $fileName = Str::slug($request->name).'.'.$request->profile_photo_path->extension();
+                        $fileNameWithUload = "storage/profile-photos/".$fileName;
+                        $request->profile_photo_path->move(public_path('storage/profile-photos'),$fileName);
+                        $request->merge([
+                            User::where('id',$id)->update( ['profile_photo_path'=>$fileNameWithUload] )
+                        ]);
+                        
+                      }
+                      
+        User::where('id',$id)->update([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => bcrypt($request->password),
+                    ]);
+                           
         return redirect()->route('users.index')->withSuccess('Kulanıcı Güncelleme işlemi başarıyla gerçekleşti');
     }
 

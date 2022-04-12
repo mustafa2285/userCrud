@@ -25,7 +25,13 @@
                 @foreach($users as $user)
                     <tr >
                         <td>{{ $loop->iteration }}</td>
-                        <td > <img src="{{ $user-> profile_photo_url }}" class="w-12 rounded-pill float-right"><strong>{{ $user->name }}</strong></td>
+                        <td >
+                            @if($user-> profile_photo_path )
+                             <img src="{{ asset($user-> profile_photo_path) }}" class="w-12 rounded-pill float-right">
+                            @else
+                                <img src="{{ $user-> profile_photo_url }}" class="w-12 rounded-pill float-right">
+                            @endif
+                             <strong>{{ $user->name }}</strong></td>
                         <td>{{ $user->email  }}</td>
                         <td>{{ $user->articles_count  }}</td>
                         <td >Kullanıcı Makalelerini gör --

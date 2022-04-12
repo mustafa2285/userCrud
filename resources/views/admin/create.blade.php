@@ -6,6 +6,10 @@
             <form method="POST" action={{route('users.store')}} enctype="multipart/form-data">
             @csrf
             <div class="form-group">
+                <label>Profil Fotoğrafı</label>
+                <input type="file" name="profile_photo_path" class="form-control">
+            </div>
+            <div class="form-group">
                 <label>Ad Soyad</label>
                 <input type="text" name="name" class="form-control" value={{old('name')}}>
             </div>

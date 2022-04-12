@@ -7,6 +7,18 @@
             @method('PUT')
             @csrf
             <div class="form-group">
+                <label>Profil Fotoğrafı</label>
+                @if($user-> profile_photo_path)
+                <a href="{{ asset($user-> profile_photo_path)}}" target="_blank">
+                    <img src="{{ asset($user-> profile_photo_path)}}" class="img-responsive w-20 rounded-pill my-2">
+                </a>
+                @else
+                <a href="{{$user-> profile_photo_url}}" target="_blank">
+                    <img src="{{$user-> profile_photo_url}}" class="img-responsive w-20 rounded-pill my-2">
+                </a>
+                @endif
+                <input type="file" name="profile_photo_path" class="form-control">
+            </div>
             <div class="form-group">
                 <label>Ad Soyad</label>
                 <input type="text" name="name" class="form-control" value={{ $user->name }}>
